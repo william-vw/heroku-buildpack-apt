@@ -80,6 +80,8 @@ APT_OPTIONS="$APT_OPTIONS -o dir::etc::sourcelist=$APT_SOURCES -o dir::etc::sour
 topic "Updating apt caches"
 apt-get $APT_OPTIONS update | indent
 
+apt-key adv --keyserver keyserver.ubuntu.com --recv-keys EF8406856DBFCA18
+
 for PACKAGE in $(cat $BUILD_DIR/Aptfile | grep -v -s -e '^#' | grep -v -s -e "^:repo:"); do
   if [[ $PACKAGE == *deb ]]; then
     PACKAGE_NAME=$(basename $PACKAGE .deb)
@@ -98,7 +100,6 @@ mkdir -p $BUILD_DIR/.apt
 for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
   topic "Installing $(basename $DEB)"
   dpkg -x $DEB $BUILD_DIR/.apt/
-  # apt install $DEB
 done
 
 topic "Writing profile script"
