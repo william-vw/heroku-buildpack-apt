@@ -95,11 +95,20 @@ done
 
 mkdir -p $BUILD_DIR/.apt
 
-for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
-  topic "Installing $(basename $DEB)"
-  #dpkg -x $DEB $BUILD_DIR/.apt/
-  apt install $DEB
-done
+# for DEB in $(ls -1 $APT_CACHE_DIR/archives/*.deb); do
+#   topic "Installing $(basename $DEB)"
+#   #dpkg -x $DEB $BUILD_DIR/.apt/
+#   apt install $DEB
+# done
+
+echo "-----> Installing swipl"
+apt-get update
+apt-get install software-properties-common
+apt-get update
+add-apt-repository ppa:swi-prolog/stable
+apt-get update
+apt-get install swi-prolog
+swipl --version
 
 topic "Writing profile script"
 mkdir -p $BUILD_DIR/.profile.d
